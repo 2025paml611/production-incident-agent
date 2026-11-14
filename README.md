@@ -19,7 +19,7 @@ This repository is at the planning and documentation stage. The implementation a
 ## Documentation
 
 - [Environment setup](docs/ENVIRONMENT_SETUP.md)
-- [Project plan](docs/PROJECT_PLAN.md)
+- [Project plan and phase checklists](docs/PROJECT_PLAN.md)
 - [Project architecture](docs/ARCHITECTURE.md)
 - [Test plan](docs/TEST_PLAN.md)
 

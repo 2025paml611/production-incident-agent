@@ -1,0 +1,135 @@
+# Project Architecture
+
+## Overview
+
+The application separates scenario data, agent implementations, evidence tools, evaluation, and presentation. A single scenario is selected and passed to all six agents. The LLM can additionally query fixture-backed tools for evidence about that same scenario.
+
+## Architecture diagram
+
+![Production Incident Agent system architecture](<Production Incident Agent Architecture.png>)
+
+The diagram shows the shared scenario path, agent responsibilities, evidence tools, and result flow. Its data-flow notes clarify that the LLM tools read the same selected fixture as the other agents, the Model-Based Reflex Agent retains observations as incident state, and Learning Agent counts change only after a recorded outcome—not merely after generating a recommendation.
+
+```text
+Streamlit UI
+    |
+    +-- Scenario catalog --> selected shared IncidentScenario
+    |                           |
+    |                           +--> Simple Reflex Agent
+    |                           +--> Model-Based Reflex Agent
+    |                           +--> Goal-Based Agent
+    |                           +--> Utility-Based Agent
+    |                           +--> Learning Agent <--> experience store
+    |                           +--> LangChain/Ollama Agent
+    |                                  +--> get_metrics
+    |                                  +--> search_logs
+    |                                  +--> get_deployment_history
+    |                                  +--> check_previous_version
+    |
+    +-- Agent results --> comparison table, evidence, reasoning, limitations
+```
+
+## Project folder layout
+
+```text
+.
+|-- requirements.txt
+|-- README.md
+|-- data/
+|   |-- scenarios/
+|   |   `-- scenarios.json
+|   `-- learning/
+|       `-- experience.json
+|-- src/
+|   `-- incident_agent/
+|       |-- app/
+|       |   `-- streamlit_app.py
+|       |-- agents/
+|       |   |-- classical/
+|       |   |   |-- simple_reflex.py
+|       |   |   |-- model_based_reflex.py
+|       |   |   |-- goal_based.py
+|       |   |   |-- utility_based.py
+|       |   |   `-- learning.py
+|       |   `-- llm/
+|       |       `-- ollama_agent.py
+|       |-- domain/
+|       |   |-- models.py
+|       |   `-- scenarios.py
+|       |-- orchestration/
+|       |   `-- incident_orchestrator.py
+|       |-- storage/
+|       |   `-- experience_store.py
+|       `-- tools/
+|           `-- evidence_tools.py
+|-- tests/
+|   |-- unit/
+|   `-- integration/
+|-- docs/
+`-- screenshots/
+```
+
+All application Python files belong under `src/incident_agent/` in their relevant package. Do not place Python modules directly in `src/`. The folder order reflects the implementation flow: define domain contracts and scenarios, implement agents and tools, connect them through orchestration, then build the UI. Add each file in its owning folder as that phase begins; avoid creating empty placeholder modules ahead of implementation.
+
+`data/scenarios/` holds the shared scenario fixtures, while `data/learning/` holds the Learning Agent's explicit experience data. `tests/unit/` and `tests/integration/` separate focused logic checks from full-flow checks. `screenshots/` contains final demonstration evidence.
+
+## Shared data and result contracts
+
+Define typed scenario data with fields such as scenario ID, incident description, timestamp/window, service symptoms, metrics, log entries, deployment history, and previous-version status. Use immutable data for an analysis run where practical.
+
+Each agent should accept the same scenario and return a common result shape:
+
+- agent name and incident summary
+- observed evidence (with source)
+- likely cause and confidence/uncertainty
+- recommended action and rationale
+- verification steps and limitations
+
+The UI should retain both the structured result and, for the LLM, tool-call/evidence details. Missing evidence should be represented explicitly rather than invented.
+
+## Agent responsibilities
+
+1. **Simple Reflex:** Select an action from current observed symptoms using condition-action rules; no persistent internal state.
+2. **Model-Based Reflex:** Maintain/update an incident state from observations and use that state with condition-action rules.
+3. **Goal-Based:** Choose actions based on explicit goals such as restoring service safely and validating recovery.
+4. **Utility-Based:** Score candidate actions against stated factors (for example, service impact, reversibility, and risk) and choose the best-scoring safe option.
+5. **Learning:** Use recorded action outcomes or success/failure counts to adjust action preference; return the counts and explain their influence. Keep experience updating separate from inference so tests can control feedback.
+6. **LLM-based:** Use LangChain with a local Ollama chat model, call relevant evidence tools, and ground its recommendation in returned tool results. The model must not be allowed to silently substitute unsupported facts for missing evidence.
+
+The classical agents should remain independently understandable and testable. Shared data structures and safe-action constraints may be reused, but the decision mechanism of each agent must remain distinct.
+
+## Evidence tools
+
+Implement deterministic, local tools over the selected scenario fixture:
+
+- `get_metrics`: return relevant metric values and time window.
+- `search_logs`: return matching log evidence for the incident.
+- `get_deployment_history`: return recent deployment/configuration events.
+- `check_previous_version`: report previous-version health or availability.
+
+Tool arguments should identify the selected scenario and any search criteria. Tool results should preserve source/context so the LLM's evidence can be checked. These are demo tools, not production observability integrations.
+
+## Scenario catalog
+
+- **A — Database pool exhaustion:** API latency and errors rise while the database connection pool is exhausted.
+- **B — Traffic spike / CPU pressure:** Request traffic and CPU are high while database connections remain normal.
+- **C — Startup failure after configuration change:** The service fails to start after a config change; the prior version was healthy.
+- **D — Ambiguous evidence:** Symptoms conflict or critical telemetry is missing; agents should communicate uncertainty and avoid overconfident or risky actions.
+
+The three specified assignment scenarios A-C must be included. D provides explicit edge/ambiguous-case coverage.
+
+## Safety and failure handling
+
+- Recommendations are advisory; the application does not execute operational changes.
+- Prefer reversible, scoped actions and include verification and rollback considerations.
+- The LLM recommendation is not considered tool-grounded unless at least two relevant tools return evidence.
+- Surface Ollama/model/tool errors in the UI. Do not present an error or missing tool evidence as a successful investigation.
+- Display uncertainty and limitations, especially for scenario D.
+
+## UI flow
+
+1. User selects a scenario and starts a comparison.
+2. The app creates one scenario input for the run and provides it to every agent.
+3. Agents produce structured results; the LLM gathers evidence through tools.
+4. UI shows the shared scenario, per-agent result cards, tool evidence, and a comparison table.
+5. Optional operator feedback or a controlled test outcome can update Learning Agent experience data in a visible and auditable way; generating a recommendation alone does not update the counts.

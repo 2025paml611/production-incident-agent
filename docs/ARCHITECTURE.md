@@ -75,17 +75,24 @@ All application Python files belong under `src/incident_agent/` in their relevan
 
 ## Shared data and result contracts
 
-Define typed scenario data with fields such as scenario ID, incident description, timestamp/window, service symptoms, metrics, log entries, deployment history, and previous-version status. Use immutable data for an analysis run where practical.
+The first implementation uses a small, curated **synthetic fixture set**, not a trained-on or externally collected dataset. `data/scenarios/scenarios.json` is the canonical fixture file. Scenario A covers latency/errors with database-pool exhaustion; B covers a traffic/CPU spike with normal database connections; C covers a configuration change followed by startup failure and a healthy previous version; D has conflicting or missing evidence. The fixtures are explicitly synthetic and are suitable for deterministic demonstrations, not operational decisions.
 
-Each agent should accept the same scenario and return a common result shape:
+`src/incident_agent/domain/models.py` defines frozen, typed models. One `IncidentScenario` instance is loaded for a run and later passed to all agents. Its fields include:
+
+- scenario ID, category, title, incident summary, affected services, and time window
+- source-labelled metric observations and log entries
+- deployment history and optional previous-version health
+- explicit missing-evidence and conflicting-evidence notes
+
+The shared `AgentResult` model requires:
 
 - agent name and incident summary
-- observed evidence (with source)
-- likely cause and confidence/uncertainty
+- scenario ID, observed evidence (with source), and likely cause
+- optional numeric confidence to allow explicit uncertainty
 - recommended action and rationale
 - verification steps and limitations
 
-The UI should retain both the structured result and, for the LLM, tool-call/evidence details. Missing evidence should be represented explicitly rather than invented.
+LLM tool-call summaries are retained as structured result data. Expected causes/actions used to evaluate a demo must remain separate from the scenario passed to agents, to avoid answer leakage. Missing evidence is represented explicitly rather than invented.
 
 ## Agent responsibilities
 

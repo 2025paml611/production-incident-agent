@@ -1,0 +1,256 @@
+{
+  "schema_version": 1,
+  "data_kind": "synthetic",
+  "scenarios": [
+    {
+      "scenario_id": "A",
+      "scenario_type": "normal",
+      "title": "API latency and errors with an exhausted database pool",
+      "incident_summary": "API latency and failed requests increased while all database connections are in use.",
+      "affected_services": ["api", "database"],
+      "time_window": "2026-11-14T13:00:00+05:30/2026-11-14T13:15:00+05:30",
+      "metrics": [
+        {
+          "name": "api_latency_p95",
+          "value": 2450,
+          "unit": "ms",
+          "source": "synthetic metrics fixture",
+          "observed_at": "2026-11-14T13:15:00+05:30"
+        },
+        {
+          "name": "api_error_rate",
+          "value": 17.8,
+          "unit": "percent",
+          "source": "synthetic metrics fixture",
+          "observed_at": "2026-11-14T13:15:00+05:30"
+        },
+        {
+          "name": "db_pool_active",
+          "value": 100,
+          "unit": "connections",
+          "source": "synthetic metrics fixture",
+          "observed_at": "2026-11-14T13:15:00+05:30"
+        },
+        {
+          "name": "db_pool_max",
+          "value": 100,
+          "unit": "connections",
+          "source": "synthetic metrics fixture",
+          "observed_at": "2026-11-14T13:15:00+05:30"
+        },
+        {
+          "name": "db_pool_waiters",
+          "value": 43,
+          "unit": "requests",
+          "source": "synthetic metrics fixture",
+          "observed_at": "2026-11-14T13:15:00+05:30"
+        },
+        {
+          "name": "cpu_utilization",
+          "value": 61,
+          "unit": "percent",
+          "source": "synthetic metrics fixture",
+          "observed_at": "2026-11-14T13:15:00+05:30"
+        }
+      ],
+      "logs": [
+        {
+          "timestamp": "2026-11-14T13:12:41+05:30",
+          "level": "ERROR",
+          "service": "api",
+          "message": "Timed out waiting to acquire a database connection from the pool.",
+          "source": "synthetic application log"
+        }
+      ],
+      "deployment_history": [],
+      "previous_version": null,
+      "missing_evidence": [
+        "No database query latency breakdown is available."
+      ],
+      "conflicting_evidence": []
+    },
+    {
+      "scenario_id": "B",
+      "scenario_type": "normal",
+      "title": "Traffic spike and high CPU with normal database connections",
+      "incident_summary": "Request traffic and CPU utilization rose sharply; database connection usage remains within its normal range.",
+      "affected_services": ["api", "database"],
+      "time_window": "2026-11-14T13:00:00+05:30/2026-11-14T13:15:00+05:30",
+      "metrics": [
+        {
+          "name": "request_rate",
+          "value": 5100,
+          "unit": "requests_per_second",
+          "source": "synthetic metrics fixture",
+          "observed_at": "2026-11-14T13:15:00+05:30"
+        },
+        {
+          "name": "cpu_utilization",
+          "value": 96,
+          "unit": "percent",
+          "source": "synthetic metrics fixture",
+          "observed_at": "2026-11-14T13:15:00+05:30"
+        },
+        {
+          "name": "db_pool_active",
+          "value": 32,
+          "unit": "connections",
+          "source": "synthetic metrics fixture",
+          "observed_at": "2026-11-14T13:15:00+05:30"
+        },
+        {
+          "name": "db_pool_max",
+          "value": 100,
+          "unit": "connections",
+          "source": "synthetic metrics fixture",
+          "observed_at": "2026-11-14T13:15:00+05:30"
+        },
+        {
+          "name": "api_latency_p95",
+          "value": 1680,
+          "unit": "ms",
+          "source": "synthetic metrics fixture",
+          "observed_at": "2026-11-14T13:15:00+05:30"
+        },
+        {
+          "name": "api_error_rate",
+          "value": 6.4,
+          "unit": "percent",
+          "source": "synthetic metrics fixture",
+          "observed_at": "2026-11-14T13:15:00+05:30"
+        }
+      ],
+      "logs": [
+        {
+          "timestamp": "2026-11-14T13:13:02+05:30",
+          "level": "WARN",
+          "service": "api",
+          "message": "Worker queue wait time increased during elevated request volume.",
+          "source": "synthetic application log"
+        }
+      ],
+      "deployment_history": [],
+      "previous_version": null,
+      "missing_evidence": [
+        "Per-instance CPU utilization and autoscaling capacity are not available."
+      ],
+      "conflicting_evidence": []
+    },
+    {
+      "scenario_id": "C",
+      "scenario_type": "critical_failure",
+      "title": "Application startup failure after a configuration change",
+      "incident_summary": "The application is failing readiness checks after a configuration update; the previous version was reported healthy.",
+      "affected_services": ["api"],
+      "time_window": "2026-11-14T13:00:00+05:30/2026-11-14T13:15:00+05:30",
+      "metrics": [
+        {
+          "name": "application_ready",
+          "value": 0,
+          "unit": "boolean_numeric",
+          "source": "synthetic deployment health fixture",
+          "observed_at": "2026-11-14T13:15:00+05:30"
+        },
+        {
+          "name": "startup_failures",
+          "value": 5,
+          "unit": "attempts",
+          "source": "synthetic deployment health fixture",
+          "observed_at": "2026-11-14T13:15:00+05:30"
+        }
+      ],
+      "logs": [
+        {
+          "timestamp": "2026-11-14T13:08:17+05:30",
+          "level": "ERROR",
+          "service": "api",
+          "message": "Startup validation failed: required configuration key PAYMENT_TIMEOUT is missing.",
+          "source": "synthetic application log"
+        }
+      ],
+      "deployment_history": [
+        {
+          "timestamp": "2026-11-14T13:04:00+05:30",
+          "version": "release-2026.11.14.2",
+          "change_type": "configuration",
+          "summary": "Updated runtime configuration for the API service.",
+          "source": "synthetic deployment history"
+        }
+      ],
+      "previous_version": {
+        "status": "healthy",
+        "version": "release-2026.11.13.4",
+        "source": "synthetic previous-version health check"
+      },
+      "missing_evidence": [
+        "The configuration diff and secret-injection status are not included."
+      ],
+      "conflicting_evidence": []
+    },
+    {
+      "scenario_id": "D",
+      "scenario_type": "edge_ambiguous",
+      "title": "Conflicting symptoms with incomplete telemetry",
+      "incident_summary": "Latency is elevated, but database pool metrics and log messages disagree and key telemetry is missing.",
+      "affected_services": ["api", "database"],
+      "time_window": "2026-11-14T13:00:00+05:30/2026-11-14T13:15:00+05:30",
+      "metrics": [
+        {
+          "name": "api_latency_p95",
+          "value": 1900,
+          "unit": "ms",
+          "source": "synthetic metrics fixture",
+          "observed_at": "2026-11-14T13:15:00+05:30"
+        },
+        {
+          "name": "cpu_utilization",
+          "value": 91,
+          "unit": "percent",
+          "source": "synthetic metrics fixture",
+          "observed_at": "2026-11-14T13:15:00+05:30"
+        },
+        {
+          "name": "db_pool_active",
+          "value": 18,
+          "unit": "connections",
+          "source": "synthetic metrics fixture",
+          "observed_at": "2026-11-14T13:15:00+05:30"
+        },
+        {
+          "name": "db_pool_max",
+          "value": 20,
+          "unit": "connections",
+          "source": "synthetic metrics fixture",
+          "observed_at": "2026-11-14T13:15:00+05:30"
+        }
+      ],
+      "logs": [
+        {
+          "timestamp": "2026-11-14T13:12:03+05:30",
+          "level": "WARN",
+          "service": "api",
+          "message": "A sampled host report shows CPU at 44 percent, unlike the aggregate metric.",
+          "source": "synthetic application log"
+        },
+        {
+          "timestamp": "2026-11-14T13:12:44+05:30",
+          "level": "ERROR",
+          "service": "api",
+          "message": "One request reported a database connection acquisition timeout.",
+          "source": "synthetic application log"
+        }
+      ],
+      "deployment_history": [],
+      "previous_version": null,
+      "missing_evidence": [
+        "Independent CPU telemetry is unavailable.",
+        "Database pool waiter count is unavailable.",
+        "Complete deployment history for the time window is unavailable."
+      ],
+      "conflicting_evidence": [
+        "Aggregate CPU metric is 91 percent while a sampled host log reports 44 percent.",
+        "Database pool metrics show 18 of 20 connections active, while one log reports an acquisition timeout."
+      ]
+    }
+  ]
+}

@@ -6,7 +6,7 @@ A Group 2 team project with two equal contributors comparing five classical AI a
 
 ## Project status
 
-This repository is at the planning and documentation stage. The implementation and screenshots will be added in later milestones.
+Phase 1 is complete: the shared scenario/result models and four synthetic scenario fixtures are implemented with unit tests. Phase 0's local Ollama tool-calling check is still pending.
 
 ## Planned capabilities
 

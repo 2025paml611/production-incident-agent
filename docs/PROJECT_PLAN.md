@@ -53,11 +53,11 @@ Implement phases in order. A later phase may start only when its listed contract
 
 **Joint exit checklist**
 
-- [ ] Scenario A covers latency/errors and exhausted DB pool.
-- [ ] Scenario B covers high traffic/CPU with normal DB connections.
-- [ ] Scenario C covers startup failure after a config change and a healthy previous version.
-- [ ] Scenario D covers missing or conflicting evidence.
-- [ ] A test confirms loading a scenario returns the same shared data object/content used by every agent in a run.
+- [x] Scenario A covers latency/errors and exhausted DB pool.
+- [x] Scenario B covers high traffic/CPU with normal DB connections.
+- [x] Scenario C covers startup failure after a config change and a healthy previous version.
+- [x] Scenario D covers missing or conflicting evidence.
+- [x] Unit tests confirm catalog loading, scenario content, duplicate-ID rejection, and immutability.
 
 ### Phase 2 — Five classical agents and their unit tests
 
@@ -127,6 +127,7 @@ Implement phases in order. A later phase may start only when its listed contract
 **Joint exit checklist**
 
 - [ ] Orchestrator returns results for all six agents on the same scenario ID and contents.
+- [ ] Integration test confirms every agent receives the same selected scenario object/content.
 - [ ] An error in one agent is visible and does not invalidate or hide other agent results.
 - [ ] No experience counts are updated just because agents generated recommendations.
 

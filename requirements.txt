@@ -1,0 +1,4 @@
+langchain-core==0.3.82
+langchain-ollama==0.3.10
+langsmith==0.4.52
+streamlit==1.67.0

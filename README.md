@@ -6,7 +6,7 @@ A Group 2 team project with two equal contributors comparing five classical AI a
 
 ## Project status
 
-Phases 1 and 2 are complete: shared scenario/result models, four synthetic fixtures, five classical agents, and Learning Agent experience tracking are implemented with unit tests. Phase 0's local Ollama tool-calling check is still pending.
+Phases 1 and 2 are complete: shared scenario/result models, four synthetic fixtures, five classical agents, and Learning Agent experience tracking are implemented with unit tests. Ollama 0.40.16 and Qwen3:4b are installed on the primary laptop; the LangChain smoke test successfully called two tools. The full LLM evidence-grounding implementation is still planned for Phase 3.
 
 ## Planned capabilities
 
@@ -29,26 +29,25 @@ The commands below are the intended workflow; run them after the application fil
 
 1. Install Python 3.11 or newer, Git, and [Ollama](https://ollama.com/download).
 2. Clone the GitHub repository, then open a terminal in its root.
-3. Create and activate a virtual environment:
+3. Create a virtual environment:
 
    ```powershell
    py -3.11 -m venv .venv
-   .\.venv\Scripts\Activate.ps1
+   .\.venv\Scripts\python.exe -m pip install --upgrade pip
    ```
 
 4. Install project dependencies:
 
    ```powershell
-   python -m pip install --upgrade pip
-   pip install -r requirements.txt
+   .\.venv\Scripts\python.exe -m pip install -r requirements.txt
    ```
 
-5. Start Ollama and download a model that supports tool calling (for example, a compatible Qwen3 model). Set the exact model name in the app configuration.
+5. Start Ollama and confirm `qwen3:4b` is available with `ollama list`. Set `INCIDENT_AGENT_OLLAMA_MODEL` if using a different installed model.
 6. Add the source directory to `PYTHONPATH`, then start the UI:
 
    ```powershell
    $env:PYTHONPATH = "$PWD\src"
-   streamlit run src\incident_agent\app\streamlit_app.py
+   .\.venv\Scripts\python.exe -m streamlit run src\incident_agent\app\streamlit_app.py
    ```
 
 The final setup instructions, model name, and run command will be confirmed against the implemented code before submission.

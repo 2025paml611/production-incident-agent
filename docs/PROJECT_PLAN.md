@@ -32,8 +32,8 @@ Implement phases in order. A later phase may start only when its listed contract
 
 **Exit checklist**
 
-- [ ] Both contributors can run Python and Ollama locally.
-- [ ] The chosen model is present and a minimal LangChain tool-call smoke test succeeds.
+- [ ] Both contributors confirm their development setup is ready.
+- [x] The chosen model is present and a minimal LangChain tool-call smoke test succeeds on the primary laptop.
 - [ ] Both contributors approve the common input/output contract and scenario IDs.
 
 ### Phase 1 — Domain models and shared scenario fixtures

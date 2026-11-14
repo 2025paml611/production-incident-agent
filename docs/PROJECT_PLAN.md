@@ -127,15 +127,16 @@ Implement phases in order. A later phase may start only when its listed contract
 
 **Files**
 
+- `src/incident_agent/orchestration/__init__.py`
 - `src/incident_agent/orchestration/incident_orchestrator.py`
 - `tests/integration/test_shared_scenario_run.py`
 
 **Joint exit checklist**
 
-- [ ] Orchestrator returns results for all six agents on the same scenario ID and contents.
-- [ ] Integration test confirms every agent receives the same selected scenario object/content.
-- [ ] An error in one agent is visible and does not invalidate or hide other agent results.
-- [ ] No experience counts are updated just because agents generated recommendations.
+- [x] Orchestrator invokes all six registered agents using one selected catalog scenario and validates each returned scenario ID.
+- [x] Integration tests confirm every agent receives the identical selected scenario object and contents.
+- [x] An error in one agent is visible and does not invalidate or hide other agent results.
+- [x] Experience counts remain unchanged during comparison and update only after explicit outcome feedback.
 
 ### Phase 5 — Streamlit interface and comparison
 

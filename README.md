@@ -6,18 +6,19 @@ A Group 2 team project with two equal contributors comparing five classical AI a
 
 ## Project status
 
-Phases 1-3 are complete: shared scenario/result models, four synthetic fixtures, five classical agents, Learning Agent experience tracking, fixture-bound LangChain tools, and the Ollama agent are implemented and tested. The Ollama agent requires evidence from at least two tools and validates exact evidence quotes before returning a recommendation. Six-agent orchestration and the Streamlit UI are planned for later phases.
+Phases 1-4 are complete: shared scenario/result models, four synthetic fixtures, five classical agents, Learning Agent experience tracking, fixture-bound LangChain tools, the Ollama agent, and six-agent orchestration are implemented and tested. Each comparison run supplies the same selected scenario to all agents, surfaces individual failures, and changes learning history only after explicit outcome feedback. The Ollama agent requires evidence from at least two tools and validates exact evidence quotes before returning a recommendation.
 
 ## Implemented capabilities
 
 - Simple Reflex, Model-Based Reflex, Goal-Based, Utility-Based, and Learning agents.
 - An Ollama-backed LangChain agent that investigates incidents through four fixture-bound evidence tools.
 - Exact evidence citations from at least two tools, with malformed or unsupported recommendations rejected.
-- Unit tests for classical agents, tool behavior, and LLM grounding; an opt-in live Qwen3 integration test.
+- Orchestration that runs all six agents against one shared scenario and reports partial failures.
+- Explicit Learning Agent outcome recording, separate from comparison runs.
+- Unit tests for classical agents, orchestration, tool behavior, and LLM grounding; an opt-in live Qwen3 integration test.
 
 ## Planned capabilities
 
-- Orchestrate all six agents against the same selected scenario.
 - Streamlit scenario selection, per-agent reasoning, and a comparison view.
 
 ## Documentation

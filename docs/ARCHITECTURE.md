@@ -2,7 +2,7 @@
 
 ## Overview
 
-The application separates scenario data, agent implementations, evidence tools, evaluation, and presentation. A single scenario is selected and passed to all six agents. The LLM can additionally query fixture-backed tools for evidence about that same scenario and must cite exact returned evidence from at least two different tools.
+The application separates scenario data, agent implementations, evidence tools, orchestration, and presentation. The orchestrator loads one selected scenario and passes the same immutable object to all six agents. Individual agent failures are retained beside successful results. Learning feedback is recorded only through a separate explicit outcome call. The LLM can additionally query fixture-backed tools for evidence about that same scenario and must cite exact returned evidence from at least two different tools.
 
 ## Architecture diagram
 
@@ -13,20 +13,19 @@ The diagram shows the shared scenario path, agent responsibilities, evidence too
 ```text
 Streamlit UI
     |
-    +-- Scenario catalog --> selected shared IncidentScenario
-    |                           |
-    |                           +--> Simple Reflex Agent
-    |                           +--> Model-Based Reflex Agent
-    |                           +--> Goal-Based Agent
-    |                           +--> Utility-Based Agent
-    |                           +--> Learning Agent <--> experience store
-    |                           +--> LangChain/Ollama Agent
-    |                                  +--> get_metrics
-    |                                  +--> search_logs
-    |                                  +--> get_deployment_history
-    |                                  +--> check_previous_version
+    +-- IncidentOrchestrator --> scenario catalog --> selected shared IncidentScenario
+    |                                                      |
+    |                                                      +--> Simple Reflex Agent
+    |                                                      +--> Model-Based Reflex Agent
+    |                                                      +--> Goal-Based Agent
+    |                                                      +--> Utility-Based Agent
+    |                                                      +--> Learning Agent <--> experience store
+    |                                                      +--> LangChain/Ollama Agent
+    |                                                             +--> evidence tools
     |
-    +-- Agent results --> comparison table, evidence, reasoning, limitations
+    +-- Per-agent result or error --> comparison table, evidence, reasoning, limitations
+    |
+    +-- Explicit outcome feedback --> Learning Agent experience store
 ```
 
 ## Project folder layout
@@ -137,7 +136,7 @@ The three specified assignment scenarios A-C must be included. D provides explic
 ## UI flow
 
 1. User selects a scenario and starts a comparison.
-2. The app creates one scenario input for the run and provides it to every agent.
-3. Agents produce structured results; the LLM gathers evidence through tools.
-4. UI shows the shared scenario, per-agent result cards, tool evidence, and a comparison table.
-5. Optional operator feedback or a controlled test outcome can update Learning Agent experience data in a visible and auditable way; generating a recommendation alone does not update the counts.
+2. The orchestrator loads one scenario input and provides the same object to every agent.
+3. Agents produce structured results; an individual failure is reported without hiding other agents' results. The LLM gathers evidence through tools.
+4. UI shows the shared scenario, per-agent result/error cards, tool evidence, and a comparison table.
+5. An explicit operator feedback or controlled test outcome can update Learning Agent experience data; generating recommendations alone does not update the counts.

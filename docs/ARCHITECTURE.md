@@ -91,16 +91,17 @@ The shared `AgentResult` model requires:
 - optional numeric confidence to allow explicit uncertainty
 - recommended action and rationale
 - verification steps and limitations
+- optional recommended action ID for associating later outcome feedback
 
 LLM tool-call summaries are retained as structured result data. Expected causes/actions used to evaluate a demo must remain separate from the scenario passed to agents, to avoid answer leakage. Missing evidence is represented explicitly rather than invented.
 
 ## Agent responsibilities
 
 1. **Simple Reflex:** Select an action from current observed symptoms using condition-action rules; no persistent internal state.
-2. **Model-Based Reflex:** Maintain/update an incident state from observations and use that state with condition-action rules.
-3. **Goal-Based:** Choose actions based on explicit goals such as restoring service safely and validating recovery.
-4. **Utility-Based:** Score candidate actions against stated factors (for example, service impact, reversibility, and risk) and choose the best-scoring safe option.
-5. **Learning:** Use recorded action outcomes or success/failure counts to adjust action preference; return the counts and explain their influence. Keep experience updating separate from inference so tests can control feedback.
+2. **Model-Based Reflex:** Retain observations and detected conditions by scenario ID, update incident state, then apply rules to that state. Reset the model before reusing an ID for an unrelated incident.
+3. **Goal-Based:** Choose a plan to restore service safely, reduce uncertainty when evidence conflicts, and verify recovery.
+4. **Utility-Based:** Score candidate actions from 1-5 on recovery impact, safety, reversibility, and evidence fit; use weights 0.35, 0.25, 0.25, and 0.15 respectively.
+5. **Learning:** Rank scenario-appropriate actions using recorded success/failure counts with a Beta(1, 1) smoothed success rate. The synthetic seed data is illustrative; only an explicit operator or controlled-test outcome updates counts. Results return the selected action ID, counts, and explanation.
 6. **LLM-based:** Use LangChain with a local Ollama chat model, call relevant evidence tools, and ground its recommendation in returned tool results. The model must not be allowed to silently substitute unsupported facts for missing evidence.
 
 The classical agents should remain independently understandable and testable. Shared data structures and safe-action constraints may be reused, but the decision mechanism of each agent must remain distinct.

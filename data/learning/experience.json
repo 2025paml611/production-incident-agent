@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "data_kind": "synthetic_seeded_outcomes",
+  "actions": {
+    "reduce_db_pressure": {
+      "successes": 3,
+      "failures": 1
+    },
+    "increase_pool_capacity": {
+      "successes": 0,
+      "failures": 2
+    },
+    "restart_database": {
+      "successes": 0,
+      "failures": 1
+    },
+    "bounded_load_shedding": {
+      "successes": 4,
+      "failures": 0
+    },
+    "bounded_app_scaling": {
+      "successes": 2,
+      "failures": 1
+    },
+    "collect_cpu_profile": {
+      "successes": 1,
+      "failures": 1
+    },
+    "review_config_rollback": {
+      "successes": 4,
+      "failures": 0
+    },
+    "patch_config_forward": {
+      "successes": 2,
+      "failures": 1
+    },
+    "restart_without_config_check": {
+      "successes": 0,
+      "failures": 2
+    },
+    "collect_independent_evidence": {
+      "successes": 3,
+      "failures": 0
+    },
+    "revert_recent_change": {
+      "successes": 2,
+      "failures": 1
+    },
+    "increase_pool_with_conflicting_metrics": {
+      "successes": 0,
+      "failures": 1
+    },
+    "collect_general_evidence": {
+      "successes": 1,
+      "failures": 0
+    },
+    "restart_without_diagnosis": {
+      "successes": 0,
+      "failures": 1
+    }
+  }
+}

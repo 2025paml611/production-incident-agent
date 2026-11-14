@@ -73,7 +73,7 @@ Once implementation is complete, the intended commands are:
 ```powershell
 $env:PYTHONPATH = "$PWD\src"
 streamlit run src\incident_agent\app\streamlit_app.py
-python -m pytest
+python -m unittest discover -s tests -v
 ```
 
 Use the final README and `--help` output, if provided, as the source of truth if the entry point or test command changes.

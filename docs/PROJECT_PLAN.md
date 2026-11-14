@@ -69,11 +69,15 @@ Implement phases in order. A later phase may start only when its listed contract
 
 **Files**
 
+- `src/incident_agent/agents/classical/common.py` (shared evidence/signal extraction only)
+- `src/incident_agent/agents/__init__.py`
+- `src/incident_agent/agents/classical/__init__.py`
 - `src/incident_agent/agents/classical/simple_reflex.py`
 - `src/incident_agent/agents/classical/model_based_reflex.py`
 - `src/incident_agent/agents/classical/goal_based.py`
 - `src/incident_agent/agents/classical/utility_based.py`
 - `src/incident_agent/agents/classical/learning.py`
+- `src/incident_agent/storage/__init__.py`
 - `src/incident_agent/storage/experience_store.py`
 - `data/learning/experience.json`
 - `tests/unit/test_classical_agents.py`
@@ -81,12 +85,12 @@ Implement phases in order. A later phase may start only when its listed contract
 
 **Joint exit checklist**
 
-- [ ] Simple Reflex uses current-observation condition/action rules.
-- [ ] Model-Based Reflex maintains and uses incident state from observations.
-- [ ] Goal-Based selects actions to satisfy explicit restoration/verification goals.
-- [ ] Utility-Based scores candidate actions using declared factors.
-- [ ] Learning uses success/failure history, explains its effect, and updates only after recorded feedback/outcome.
-- [ ] Tests cover expected decisions, unknown/ambiguous inputs, and learning-store update behavior.
+- [x] Simple Reflex uses current-observation condition/action rules.
+- [x] Model-Based Reflex maintains and uses incident state from observations.
+- [x] Goal-Based selects actions to satisfy explicit restoration/verification goals.
+- [x] Utility-Based scores candidate actions using declared factors.
+- [x] Learning uses success/failure history, explains its effect, and updates only after recorded feedback/outcome.
+- [x] Tests cover expected decisions, unknown/ambiguous inputs, and learning-store update behavior.
 
 ### Phase 3 — Evidence tools and local LLM agent
 

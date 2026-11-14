@@ -125,12 +125,15 @@ class AgentResult:
     verification_steps: tuple[str, ...]
     limitations: tuple[str, ...]
     tool_calls: tuple[ToolCallEvidence, ...] = ()
+    recommended_action_id: str | None = None
 
     def __post_init__(self) -> None:
         if not self.agent_id.strip():
             raise ValueError("agent_id must not be empty")
         if not self.scenario_id.strip():
             raise ValueError("scenario_id must not be empty")
+        if self.recommended_action_id is not None and not self.recommended_action_id.strip():
+            raise ValueError("recommended_action_id must not be empty when provided")
         for field_name in (
             "evidence",
             "verification_steps",

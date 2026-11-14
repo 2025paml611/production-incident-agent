@@ -6,15 +6,19 @@ A Group 2 team project with two equal contributors comparing five classical AI a
 
 ## Project status
 
-Phases 1 and 2 are complete: shared scenario/result models, four synthetic fixtures, five classical agents, and Learning Agent experience tracking are implemented with unit tests. Ollama 0.40.16 and Qwen3:4b are installed on the primary laptop; the LangChain smoke test successfully called two tools. The full LLM evidence-grounding implementation is still planned for Phase 3.
+Phases 1-3 are complete: shared scenario/result models, four synthetic fixtures, five classical agents, Learning Agent experience tracking, fixture-bound LangChain tools, and the Ollama agent are implemented and tested. The Ollama agent requires evidence from at least two tools and validates exact evidence quotes before returning a recommendation. Six-agent orchestration and the Streamlit UI are planned for later phases.
+
+## Implemented capabilities
+
+- Simple Reflex, Model-Based Reflex, Goal-Based, Utility-Based, and Learning agents.
+- An Ollama-backed LangChain agent that investigates incidents through four fixture-bound evidence tools.
+- Exact evidence citations from at least two tools, with malformed or unsupported recommendations rejected.
+- Unit tests for classical agents, tool behavior, and LLM grounding; an opt-in live Qwen3 integration test.
 
 ## Planned capabilities
 
-- Simple Reflex, Model-Based Reflex, Goal-Based, Utility-Based, and Learning agents.
-- An Ollama-backed LangChain agent that investigates incidents through evidence tools.
-- Shared scenario data so agent recommendations can be compared fairly.
+- Orchestrate all six agents against the same selected scenario.
 - Streamlit scenario selection, per-agent reasoning, and a comparison view.
-- Scenario and agent tests, including a critical failure and an ambiguous evidence case.
 
 ## Documentation
 
@@ -23,12 +27,15 @@ Phases 1 and 2 are complete: shared scenario/result models, four synthetic fixtu
 - [Project architecture](docs/ARCHITECTURE.md)
 - [Test plan](docs/TEST_PLAN.md)
 
-## Planned quick start (Windows PowerShell)
-
-The commands below are the intended workflow; run them after the application files and `requirements.txt` have been implemented.
+## Quick start (Windows PowerShell)
 
 1. Install Python 3.11 or newer, Git, and [Ollama](https://ollama.com/download).
-2. Clone the GitHub repository, then open a terminal in its root.
+2. Install and start the local model (default: `qwen3:4b`), then clone the repository and open a terminal in its root:
+
+   ```powershell
+   ollama pull qwen3:4b
+   ```
+
 3. Create a virtual environment:
 
    ```powershell
@@ -42,15 +49,17 @@ The commands below are the intended workflow; run them after the application fil
    .\.venv\Scripts\python.exe -m pip install -r requirements.txt
    ```
 
-5. Start Ollama and confirm `qwen3:4b` is available with `ollama list`. Set `INCIDENT_AGENT_OLLAMA_MODEL` if using a different installed model.
-6. Add the source directory to `PYTHONPATH`, then start the UI:
+5. Confirm the model is available with `ollama list`. Set `INCIDENT_AGENT_OLLAMA_MODEL` to use another installed model.
+6. Add the source directory to `PYTHONPATH` to run the unit tests or the opt-in Ollama test:
 
    ```powershell
    $env:PYTHONPATH = "$PWD\src"
-   .\.venv\Scripts\python.exe -m streamlit run src\incident_agent\app\streamlit_app.py
+   .\.venv\Scripts\python.exe -m unittest discover -s tests -v
+   $env:RUN_OLLAMA_INTEGRATION = "1"
+   .\.venv\Scripts\python.exe -m unittest tests.integration.test_ollama_tool_calling -v
    ```
 
-The final setup instructions, model name, and run command will be confirmed against the implemented code before submission.
+The live integration test contacts the local Ollama model and can take longer than the unit tests. The UI and run command will be added in a later phase.
 
 ## Submission evidence
 

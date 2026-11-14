@@ -106,14 +106,16 @@ Implement phases in order. A later phase may start only when its listed contract
 - `src/incident_agent/tools/evidence_tools.py`
 - `src/incident_agent/agents/llm/ollama_agent.py`
 - `tests/unit/test_evidence_tools.py`
-- `tests/integration/test_llm_tool_calling.py`
+- `tests/unit/test_ollama_agent.py`
+- `tests/integration/test_ollama_tool_calling.py`
 
 **Joint exit checklist**
 
-- [ ] Each tool returns the expected evidence for its scenario and identifies its source.
-- [ ] A test or recorded run proves at least two relevant tools were called for a scenario.
-- [ ] The LLM recommendation refers to returned evidence rather than unsupported claims.
-- [ ] Missing evidence, unavailable Ollama, or failed tool calls are surfaced as errors/limitations, not success-shaped output.
+- [x] Each tool returns the expected evidence for its scenario and identifies its source.
+- [x] Tool instances are scoped to one selected scenario fixture; unit tests confirm scenario IDs and contents cannot be switched by tool arguments.
+- [x] Unit tests prove at least two relevant tools were called; an opt-in live test exercises the local Ollama model.
+- [x] The LLM recommendation cites exact returned evidence from at least two tools; unit tests reject unsupported citations.
+- [x] Missing fixture evidence is explicit; unavailable Ollama, malformed responses, and failed tool calls surface as errors, not success-shaped output.
 
 ### Phase 4 — Orchestration and shared-input validation
 

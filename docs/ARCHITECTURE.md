@@ -2,7 +2,7 @@
 
 ## Overview
 
-The application separates scenario data, agent implementations, evidence tools, evaluation, and presentation. A single scenario is selected and passed to all six agents. The LLM can additionally query fixture-backed tools for evidence about that same scenario.
+The application separates scenario data, agent implementations, evidence tools, evaluation, and presentation. A single scenario is selected and passed to all six agents. The LLM can additionally query fixture-backed tools for evidence about that same scenario and must cite exact returned evidence from at least two different tools.
 
 ## Architecture diagram
 

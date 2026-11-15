@@ -23,6 +23,7 @@ Streamlit UI
     |                                                      +--> LangChain/Ollama Agent
     |                                                             +--> evidence tools
     |
+    +-- Selected fixture --> synthetic metric snapshot cards with source/time context
     +-- Per-agent result or error --> comparison table, evidence, reasoning, limitations
     |
     +-- Explicit outcome feedback --> Learning Agent experience store
@@ -138,5 +139,5 @@ The three specified assignment scenarios A-C must be included. D provides explic
 1. User selects a scenario and starts a comparison.
 2. The orchestrator loads one scenario input and provides the same object to every agent.
 3. Agents produce structured results; an individual failure is reported without hiding other agents' results. The LLM gathers evidence through tools.
-4. UI shows the shared scenario, per-agent result/error cards, tool evidence, and a comparison table.
-5. An explicit operator feedback or controlled test outcome can update Learning Agent experience data; generating recommendations alone does not update the counts.
+4. UI shows the shared scenario, snapshot metric cards (not a time series), per-agent result/error cards, tool evidence, and a comparison table.
+5. The comparison explains why decisions can differ across agent mechanisms. An explicit operator feedback or controlled test outcome can update Learning Agent experience data; generating recommendations alone does not update the counts.

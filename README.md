@@ -2,11 +2,11 @@
 
 Intelligent Production Incident Management System (Assignment 1-set-1 - Group-2).
 
-A Group 2 team project with two equal contributors comparing five classical AI agents and one local-LLM agent on the same production-incident scenario. The application will show their recommendations and supporting evidence in a Streamlit interface.
+A solo Group 2 project comparing five classical AI agents and one local-LLM agent on the same production-incident scenario. The application shows their recommendations and supporting evidence in a Streamlit interface.
 
 ## Project status
 
-Phases 1-4 are complete: shared scenario/result models, four synthetic fixtures, five classical agents, Learning Agent experience tracking, fixture-bound LangChain tools, the Ollama agent, and six-agent orchestration are implemented and tested. Each comparison run supplies the same selected scenario to all agents, surfaces individual failures, and changes learning history only after explicit outcome feedback. The Ollama agent requires evidence from at least two tools and validates exact evidence quotes before returning a recommendation.
+Phases 1-5 are complete: shared scenario/result models, four synthetic fixtures, five classical agents, Learning Agent experience tracking, fixture-bound LangChain tools, the Ollama agent, six-agent orchestration, and the Streamlit comparison UI are implemented and tested. Each comparison run supplies the same selected scenario to all agents, surfaces individual failures, and changes learning history only after explicit outcome feedback. The Ollama agent requires evidence from at least two tools and validates exact evidence quotes before returning a recommendation.
 
 ## Implemented capabilities
 
@@ -15,11 +15,13 @@ Phases 1-4 are complete: shared scenario/result models, four synthetic fixtures,
 - Exact evidence citations from at least two tools, with malformed or unsupported recommendations rejected.
 - Orchestration that runs all six agents against one shared scenario and reports partial failures.
 - Explicit Learning Agent outcome recording, separate from comparison runs.
+- Streamlit scenario selection, synthetic metric snapshot cards with source/time context,
+  per-agent reasoning, and a readable comparison view.
 - Unit tests for classical agents, orchestration, tool behavior, and LLM grounding; an opt-in live Qwen3 integration test.
 
-## Planned capabilities
+## Remaining work
 
-- Streamlit scenario selection, per-agent reasoning, and a comparison view.
+- Phase 6: final evaluation, screenshots, and submission checklist.
 
 ## Documentation
 
@@ -51,16 +53,33 @@ Phases 1-4 are complete: shared scenario/result models, four synthetic fixtures,
    ```
 
 5. Confirm the model is available with `ollama list`. Set `INCIDENT_AGENT_OLLAMA_MODEL` to use another installed model.
-6. Add the source directory to `PYTHONPATH` to run the unit tests or the opt-in Ollama test:
+6. Add the source directory to `PYTHONPATH` and run the deterministic tests:
 
    ```powershell
    $env:PYTHONPATH = "$PWD\src"
    .\.venv\Scripts\python.exe -m unittest discover -s tests -v
+   ```
+
+The UI runs all six agents against the same selected synthetic scenario. Its CPU,
+request-rate, latency, and database-pool cards show fixture snapshots, not live
+telemetry or a time series. The local Ollama model must be running for the LLM
+recommendation; its errors are shown alongside other agents' results.
+
+Start the app in a separate terminal:
+
+   ```powershell
+   $env:PYTHONPATH = "$PWD\src"
+   .\.venv\Scripts\python.exe -m streamlit run src\incident_agent\app\streamlit_app.py
+   ```
+
+To run the slower live Ollama verification:
+
+   ```powershell
    $env:RUN_OLLAMA_INTEGRATION = "1"
    .\.venv\Scripts\python.exe -m unittest tests.integration.test_ollama_tool_calling -v
    ```
 
-The live integration test contacts the local Ollama model and can take longer than the unit tests. The UI and run command will be added in a later phase.
+The live integration test contacts the local Ollama model and can take longer than the unit tests.
 
 ## Submission evidence
 

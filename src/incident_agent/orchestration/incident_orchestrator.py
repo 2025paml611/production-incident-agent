@@ -160,6 +160,15 @@ class IncidentOrchestrator:
             raise TypeError("configured learning agent does not support outcome recording")
         return record_outcome(action_id, succeeded)
 
+    def get_learning_record(self, action_id: str) -> ExperienceRecord:
+        """Read the current outcome counts for a learning-agent action."""
+
+        experience_store = getattr(self._learning_agent, "experience_store", None)
+        get_record = getattr(experience_store, "get", None)
+        if not callable(get_record):
+            raise TypeError("configured learning agent does not expose its experience store")
+        return get_record(action_id)
+
     @staticmethod
     def _run_agent(
         agent_id: str, agent: IncidentAgent, scenario: IncidentScenario

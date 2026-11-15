@@ -15,14 +15,14 @@ Build an incident assistant that investigates software-service incidents and com
 
 ## Phase-wise implementation plan
 
-Implement phases in order. A later phase may start only when its listed contract or prerequisite is agreed. Keep every Python module inside its relevant nested package under `src/incident_agent/`; do not create modules directly in `src/`. The two members contribute equally: each phase has a shared review/integration responsibility, and domain leads coordinate rather than work in isolation.
+Implement phases in order. A later phase may start only when its listed contract or prerequisite is agreed. Keep every Python module inside its relevant nested package under `src/incident_agent/`; do not create modules directly in `src/`.
 
 ### Phase 0 — Agree contracts and verify the local model
 
 **Tasks**
 
 - Confirm Python version, virtual environment, dependency strategy, Ollama installation, and a small tool-calling model.
-- Agree on the shared `IncidentScenario` input and `AgentResult` output fields before implementing agents.
+- Define the shared `IncidentScenario` input and `AgentResult` output fields before implementing agents.
 - Confirm scenario IDs A-D and define how missing/conflicting evidence is represented.
 
 **Files**
@@ -32,9 +32,9 @@ Implement phases in order. A later phase may start only when its listed contract
 
 **Exit checklist**
 
-- [ ] Both contributors confirm their development setup is ready.
+- [x] The contributor's development setup is ready.
 - [x] The chosen model is present and a minimal LangChain tool-call smoke test succeeds on the primary laptop.
-- [ ] Both contributors approve the common input/output contract and scenario IDs.
+- [x] The common input/output contract and scenario IDs are documented.
 
 ### Phase 1 — Domain models and shared scenario fixtures
 
@@ -51,7 +51,7 @@ Implement phases in order. A later phase may start only when its listed contract
 - `data/scenarios/scenarios.json`
 - `tests/unit/test_scenarios.py`
 
-**Joint exit checklist**
+**Exit checklist**
 
 - [x] Scenario A covers latency/errors and exhausted DB pool.
 - [x] Scenario B covers high traffic/CPU with normal DB connections.
@@ -83,7 +83,7 @@ Implement phases in order. A later phase may start only when its listed contract
 - `tests/unit/test_classical_agents.py`
 - `tests/unit/test_learning_agent.py`
 
-**Joint exit checklist**
+**Exit checklist**
 
 - [x] Simple Reflex uses current-observation condition/action rules.
 - [x] Model-Based Reflex maintains and uses incident state from observations.
@@ -109,7 +109,7 @@ Implement phases in order. A later phase may start only when its listed contract
 - `tests/unit/test_ollama_agent.py`
 - `tests/integration/test_ollama_tool_calling.py`
 
-**Joint exit checklist**
+**Exit checklist**
 
 - [x] Each tool returns the expected evidence for its scenario and identifies its source.
 - [x] Tool instances are scoped to one selected scenario fixture; unit tests confirm scenario IDs and contents cannot be switched by tool arguments.
@@ -131,7 +131,7 @@ Implement phases in order. A later phase may start only when its listed contract
 - `src/incident_agent/orchestration/incident_orchestrator.py`
 - `tests/integration/test_shared_scenario_run.py`
 
-**Joint exit checklist**
+**Exit checklist**
 
 - [x] Orchestrator invokes all six registered agents using one selected catalog scenario and validates each returned scenario ID.
 - [x] Integration tests confirm every agent receives the identical selected scenario object and contents.
@@ -154,7 +154,7 @@ Implement phases in order. A later phase may start only when its listed contract
 - `tests/integration/test_ui_flow.py` (or focused UI tests supported by the selected framework)
 - `screenshots/` (final captured evidence)
 
-**Joint exit checklist**
+**Exit checklist**
 
 - [x] User can select each of the four scenarios and run the six-agent comparison.
 - [x] Results and decision differences are visible without implying equal certainty.
@@ -167,7 +167,7 @@ Implement phases in order. A later phase may start only when its listed contract
 
 **Tasks**
 
-- Run unit and integration suites; fix failures and record exact commands/results.
+- Run unit and integration suites; fix failures and record exact commands/results in `docs/TEST_RESULTS.md`.
 - Run all scenarios end-to-end and capture screenshots with no credentials or unrelated private data.
 - Finish README setup/run instructions, project architecture, comparison explanation, and test evidence.
 - Confirm the repository contains all required source, fixture, dependency, documentation, and screenshot files; push final changes to GitHub.
@@ -178,11 +178,12 @@ Implement phases in order. A later phase may start only when its listed contract
 - Save demo images under `screenshots/`.
 - Keep final test output in the submission evidence (document results; do not claim tests that were not run).
 
-**Joint exit checklist**
+**Exit checklist**
 
 - [ ] All submission checklist items below are complete.
 - [ ] Clean-environment setup and application launch have been verified.
-- [ ] Test results, selected Ollama model, and any skipped live tests are documented.
+- [x] Deterministic test results, selected Ollama model, and skipped/live test outcomes are documented.
+- [x] Scenarios A-D were run through the Streamlit app and screenshots saved under `screenshots/`.
 - [ ] Final commit is pushed and visible in the Group 2 GitHub repository.
 
 ## Estimated effort and schedule
@@ -215,10 +216,9 @@ The estimated work sums to about 28.5 person-hours. It assumes the local model i
 
 | Date (2026) | Focus | End-of-day checkpoint |
 |---|---|---|
-| **Nov 14** | Phase 0-1: agree input/result contracts and A-D scenario schema; prepare shared fixtures; verify local Ollama tool calling. | Both members can independently explain the contract; fixture and model smoke checks pass. |
-| **Nov 15** | Phases 2-3: build classical and Learning Agents alongside the LLM tools/agent; review each other's unit tests. | Five classical decisions pass focused tests; LLM proves two tool calls using scenario evidence. |
-| **Nov 16** | Phases 4-5: integrate orchestrator, verify same-input behavior, build and run the Streamlit comparison. | All six agents run against A-D; results/errors and comparison are visible. |
-| **Nov 17** | Phase 6: regression tests, scenario screenshots, README/setup and comparison explanation; resolve issues jointly. | Submission checklist complete and results recorded. |
+| **Nov 14** | Phase 0-1: define input/result contracts and A-D scenario schema; prepare shared fixtures; verify local Ollama tool calling. | Fixture and local-model smoke checks pass. |
+| **Nov 15** | Phases 2-5: implement agents, evidence tools, orchestration, and the Streamlit comparison. | All six agents run on shared scenarios; tests pass and comparison UI is usable. |
+| **Nov 16-17** | Phase 6: run regression/live-model tests, capture scenario screenshots, and finish submission documentation. | Submission checklist complete and results recorded. |
 | **Nov 18 (due 11:59 PM)** | Final clean-environment run, verify files/screenshots and GitHub state; reserve for blockers. | Submit before 11:59 PM; avoid optional feature work. |
 
 The plan targets roughly four focused implementation days and a final-day buffer. It is aggressive for one contributor, especially if Ollama downloads or tool calling require troubleshooting; prioritize the acceptance criteria and defer optional polish.
@@ -261,15 +261,15 @@ The plan targets roughly four focused implementation days and a final-day buffer
 
 ## Submission checklist
 
-- [ ] Five separate classical-agent implementations and tests
-- [ ] LangChain agent connected to a local Ollama model; configured model and run instructions documented
-- [ ] At least two relevant LLM tool calls recorded, with recommendations grounded in returned evidence
-- [ ] Shared scenario/result contract and integration test proving the same scenario reaches all six agents
-- [ ] Scenario fixtures and results for A (DB pool exhaustion), B (traffic/CPU spike), C (config startup failure), and D (ambiguous evidence)
-- [ ] Learning Agent experience store, controlled feedback update, test, and explanation of its effect
-- [ ] Streamlit scenario selector, six decision/reasoning views, and comparison table
-- [ ] Comparison explanation describing why the agents may reach different recommendations
-- [ ] `requirements.txt`, README, setup instructions, architecture diagram/reference, and test plan
-- [ ] Recorded test commands/results, including any skipped Ollama integration tests and reasons
-- [ ] Screenshots for A, B, and C; include D and Learning Agent before/after feedback when practical
+- [x] Five separate classical-agent implementations and tests
+- [x] LangChain agent connected to a local Ollama model; configured model and run instructions documented
+- [x] At least two relevant LLM tool calls recorded, with recommendations grounded in returned evidence
+- [x] Shared scenario/result contract and integration test proving the same scenario reaches all six agents
+- [x] Scenario fixtures and results for A (DB pool exhaustion), B (traffic/CPU spike), C (config startup failure), and D (ambiguous evidence)
+- [x] Learning Agent experience store, controlled feedback update, test, and explanation of its effect
+- [x] Streamlit scenario selector, six decision/reasoning views, and comparison table
+- [x] Comparison explanation describing why the agents may reach different recommendations
+- [x] `requirements.txt`, README, setup instructions, architecture diagram/reference, and test plan
+- [x] Recorded test commands/results, including the skipped default Ollama test and successful opt-in live test
+- [x] Screenshots for A, B, and C, plus D
 - [ ] Final source and evidence pushed to the Group 2 GitHub repository

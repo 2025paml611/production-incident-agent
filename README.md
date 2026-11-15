@@ -8,6 +8,11 @@ A solo Group 2 project comparing five classical AI agents and one local-LLM agen
 
 Phases 1-5 are complete: shared scenario/result models, four synthetic fixtures, five classical agents, Learning Agent experience tracking, fixture-bound LangChain tools, the Ollama agent, six-agent orchestration, and the Streamlit comparison UI are implemented and tested. Each comparison run supplies the same selected scenario to all agents, surfaces individual failures, and changes learning history only after explicit outcome feedback. The Ollama agent requires evidence from at least two tools and validates exact evidence quotes before returning a recommendation.
 
+Phase 6 verification is recorded in [docs/TEST_RESULTS.md](docs/TEST_RESULTS.md).
+The deterministic suite and live Ollama tool-calling test passed, and the scenario
+screenshots are included under `screenshots/`. Final clean-environment verification
+and pushing the Phase 6 branch remain.
+
 ## Implemented capabilities
 
 - Simple Reflex, Model-Based Reflex, Goal-Based, Utility-Based, and Learning agents.
@@ -19,9 +24,25 @@ Phases 1-5 are complete: shared scenario/result models, four synthetic fixtures,
   per-agent reasoning, and a readable comparison view.
 - Unit tests for classical agents, orchestration, tool behavior, and LLM grounding; an opt-in live Qwen3 integration test.
 
-## Remaining work
+## Why agent recommendations differ
 
-- Phase 6: final evaluation, screenshots, and submission checklist.
+Every agent receives the same immutable selected scenario, but uses a different
+decision mechanism:
+
+- **Simple Reflex** applies condition/action rules to the current observations.
+- **Model-Based Reflex** updates retained incident state before applying rules.
+- **Goal-Based** plans toward safe service restoration and verification.
+- **Utility-Based** scores candidate actions against recovery, safety, reversibility,
+  and evidence fit.
+- **Learning** ranks suitable actions using the seeded success/failure history and
+  explains the counts used.
+- **Local Ollama LLM** gathers fixture evidence through LangChain tools and must cite
+  returned evidence from at least two tools.
+
+Different reasoning mechanisms can produce different actions, while missing or
+conflicting fixture evidence and the Learning Agent's experience history can also
+affect recommendations. The orchestrator reports each result independently; it does
+not vote or select a winning agent.
 
 ## Documentation
 
@@ -29,6 +50,7 @@ Phases 1-5 are complete: shared scenario/result models, four synthetic fixtures,
 - [Project plan and phase checklists](docs/PROJECT_PLAN.md)
 - [Project architecture](docs/ARCHITECTURE.md)
 - [Test plan](docs/TEST_PLAN.md)
+- [Recorded test results](docs/TEST_RESULTS.md)
 
 ## Quick start (Windows PowerShell)
 
@@ -83,4 +105,7 @@ The live integration test contacts the local Ollama model and can take longer th
 
 ## Submission evidence
 
-The final submission will include source code, `requirements.txt`, test results, and screenshots of the three required scenarios (plus the ambiguous case if implemented).
+Recorded deterministic and live Ollama test results are in
+[docs/TEST_RESULTS.md](docs/TEST_RESULTS.md). Scenario screenshots are saved under
+`screenshots/`; all scenario evidence uses synthetic fixtures, not production
+telemetry.

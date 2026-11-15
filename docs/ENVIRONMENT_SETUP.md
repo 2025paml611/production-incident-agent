@@ -68,7 +68,7 @@ $env:PYTHONPATH = "$PWD\src"
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-The live Ollama integration test is opt-in because it loads the local model and can take longer than deterministic unit tests. On the primary development laptop, Ollama 0.40.16 with `qwen3:4b` passed this test on November 14, 2026. The test exercises the incident agent, requiring tool calls and validating that the returned recommendation cites evidence from the tool results.
+The live Ollama integration test is opt-in because it loads the local model and can take longer than deterministic unit tests. Ollama 0.40.16 with `qwen3:4b` passed this test on November 14 and November 15, 2026. The test exercises the incident agent, requiring tool calls and validating that the returned recommendation cites evidence from the tool results. The latest run is recorded in [Test Results](TEST_RESULTS.md).
 
 ```powershell
 $env:PYTHONPATH = "$PWD\src"

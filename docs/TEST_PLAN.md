@@ -29,6 +29,9 @@ Where possible, keep tests deterministic by testing tool adapters and prompt/res
 ## UI and integration tests
 
 - Scenario selection supplies the same input to all six agents.
+- Metric snapshot cards format supplied CPU, request-rate, latency, and database-pool
+  observations; unavailable values are labeled rather than inferred. The UI identifies
+  fixtures as synthetic snapshots, not live telemetry or a time series.
 - Results display decision, reasoning, evidence, verification steps, and limitations.
 - The comparison includes all agents and makes differences readable.
 - LLM/tool errors are visible and are not displayed as successful recommendations.

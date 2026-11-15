@@ -68,7 +68,7 @@ $env:PYTHONPATH = "$PWD\src"
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-The live Ollama smoke test is opt-in because it loads the local model and can take longer than deterministic unit tests. On the primary development laptop, Ollama 0.40.16 with `qwen3:4b` passed this smoke test on November 14, 2026. The test confirmed the model called both tools and each returned evidence from scenario B. It does not yet verify that the model uses tool results in a final recommendation; that is part of the LLM agent phase.
+The live Ollama integration test is opt-in because it loads the local model and can take longer than deterministic unit tests. On the primary development laptop, Ollama 0.40.16 with `qwen3:4b` passed this test on November 14, 2026. The test exercises the incident agent, requiring tool calls and validating that the returned recommendation cites evidence from the tool results.
 
 ```powershell
 $env:PYTHONPATH = "$PWD\src"
@@ -77,14 +77,16 @@ $env:RUN_OLLAMA_INTEGRATION = "1"
 $env:RUN_OLLAMA_INTEGRATION = $null
 ```
 
-It checks that LangChain/Ollama calls both `get_metrics` and `search_logs`, then confirms that the tools return evidence from the selected shared fixture.
+It exercises the incident agent end-to-end, checking that the Ollama response uses exact evidence quotes returned by at least two tools.
 
-Start the app once the UI implementation is in place:
+Start the Streamlit app:
 
 ```powershell
 $env:PYTHONPATH = "$PWD\src"
 .\.venv\Scripts\python.exe -m streamlit run src\incident_agent\app\streamlit_app.py
 ```
+
+Select one of scenarios A-D and choose **Compare all six agents**. The Ollama model must be running for its result; other agents still report their results if it is unavailable. Learning history changes only when an explicit success/failure outcome is recorded in the UI.
 
 ## Troubleshooting checklist
 

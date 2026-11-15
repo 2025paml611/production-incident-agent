@@ -6,7 +6,7 @@ Build an incident assistant that investigates software-service incidents and com
 
 ## Scope and assumptions
 
-- Group 2 team project with two contributors working equally.
+- Individual Group 2 project with one contributor.
 - Local demonstration using fixed, synthetic scenario data; no connection to a real production system.
 - The LLM uses a local Ollama model through LangChain and must call at least two relevant evidence tools.
 - The Learning Agent reads and updates explicit success/failure experience data.
@@ -156,10 +156,12 @@ Implement phases in order. A later phase may start only when its listed contract
 
 **Joint exit checklist**
 
-- [ ] User can run each of the four scenarios through all six agents.
-- [ ] Results and differences are visible without implying equal certainty.
-- [ ] UI displays tool evidence and exposes model/tool errors.
-- [ ] Learning history and any outcome update are visible and attributable.
+- [x] User can select each of the four scenarios and run the six-agent comparison.
+- [x] Results and decision differences are visible without implying equal certainty.
+- [x] CPU, request rate, latency, and database-pool snapshot cards show supplied values, identify missing observations, and disclose that the fixture is synthetic rather than live or time-series data.
+- [x] UI displays LLM tool evidence and exposes individual model/tool errors.
+- [x] Learning history is visible; outcome updates require explicit action and report updated counts.
+- [x] Streamlit interaction tests cover scenario selection, comparison, feedback, and an individual-agent failure.
 
 ### Phase 6 — Test, evaluate, document, and submit
 
@@ -183,9 +185,9 @@ Implement phases in order. A later phase may start only when its listed contract
 - [ ] Test results, selected Ollama model, and any skipped live tests are documented.
 - [ ] Final commit is pushed and visible in the Group 2 GitHub repository.
 
-## Two-contributor effort and schedule
+## Estimated effort and schedule
 
-The estimates below are planning estimates, not guarantees. They distinguish **person-hours** (sum of contributors' work) from **calendar time** (elapsed time, with independent tasks done in parallel).
+The estimates below are planning estimates, not guarantees. They represent the approximate total effort for one contributor; actual time depends on local model setup and debugging.
 
 | Workstream | Estimated person-hours |
 |---|---:|
@@ -200,15 +202,14 @@ The estimates below are planning estimates, not guarantees. They distinguish **p
 | Documentation and screenshots | 2 |
 | **Estimated total** | **28.5 person-hours** |
 
-These estimates describe total team effort and sum to about 28.5 person-hours, or approximately 14.25 hours per member if split equally. They assume the local model is available and tool-calling compatible; model troubleshooting can add time. Two contributors do not halve the work because interface agreement, integration, and end-to-end testing are shared or sequential tasks. Rebalance task ownership during check-ins so the actual contributions remain equitable.
+The estimated work sums to about 28.5 person-hours. It assumes the local model is available and tool-calling compatible; model troubleshooting can add time. Integration and end-to-end testing are sequential tasks, so prioritizing the acceptance criteria is more important than optional polish.
 
-### Suggested ownership
+### Single-contributor workflow
 
-- **Contributor 1 — classical decision systems:** co-design the shared contracts and scenario fixtures; implement the classical agents and Learning Agent; pair on end-to-end testing, comparison, and documentation.
-- **Contributor 2 — LLM and experience integration:** co-design the shared contracts and scenario fixtures; implement the evidence tools and LangChain/Ollama agent; pair on Streamlit, end-to-end testing, comparison, and documentation.
-- **Both contributors — shared ownership:** review each other's work, jointly integrate the six agents, validate the UI and tests, capture screenshots, and prepare the final submission. Rotate who drives integration and who reviews so both members understand the whole system.
-
-This is a true two-member team plan for Group 2. The domain split avoids duplicate implementation while shared design, review, integration, and evaluation provide meaningful and approximately equal contributions. Rebalance implementation, testing, and documentation tasks if one member's workload diverges; task ownership is for coordination, not exclusive ownership of the final result.
+- Define and validate the shared scenario/result contracts and fixture data.
+- Implement and test the five classical agents, experience store, evidence tools, and local Ollama agent.
+- Integrate all six agents through the orchestrator and build the Streamlit comparison UI.
+- Run end-to-end tests, capture scenario screenshots, and complete documentation and submission checks.
 
 ### Deadline-driven calendar plan
 
@@ -220,7 +221,7 @@ This is a true two-member team plan for Group 2. The domain split avoids duplica
 | **Nov 17** | Phase 6: regression tests, scenario screenshots, README/setup and comparison explanation; resolve issues jointly. | Submission checklist complete and results recorded. |
 | **Nov 18 (due 11:59 PM)** | Final clean-environment run, verify files/screenshots and GitHub state; reserve for blockers. | Submit before 11:59 PM; avoid optional feature work. |
 
-The plan targets roughly four focused implementation days with two contributors and a final-day buffer. It is an aggressive schedule, especially if Ollama downloads or tool calling require troubleshooting; prioritize the acceptance criteria and defer optional polish.
+The plan targets roughly four focused implementation days and a final-day buffer. It is aggressive for one contributor, especially if Ollama downloads or tool calling require troubleshooting; prioritize the acceptance criteria and defer optional polish.
 
 ## Assignment requirement traceability
 

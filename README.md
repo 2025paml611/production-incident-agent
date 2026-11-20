@@ -51,6 +51,10 @@ conflicting fixture evidence and the Learning Agent's experience history can als
 affect recommendations. The orchestrator reports each result independently; it does
 not vote or select a winning agent.
 
+Recorded actions for scenarios A–D, including where the local LLM diverges from the
+classical agents, are in [docs/COMPARISON.md](docs/COMPARISON.md). After a comparison
+run, the Streamlit page also lists each agent's action with the mechanism that produced it.
+
 ## Documentation
 
 - [Environment setup](docs/ENVIRONMENT_SETUP.md)
@@ -58,6 +62,7 @@ not vote or select a winning agent.
 - [Project architecture](docs/ARCHITECTURE.md)
 - [Test plan](docs/TEST_PLAN.md)
 - [Recorded test results](docs/TEST_RESULTS.md)
+- [Scenario comparison and why decisions differ](docs/COMPARISON.md)
 
 ## Quick start (Windows PowerShell)
 

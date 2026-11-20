@@ -158,6 +158,12 @@ class StreamlitUIFlowTests(unittest.TestCase):
             app.button(key="run-comparison").click().run()
 
             self.assertTrue(any("Agent comparison" in item.value for item in app.subheader))
+            self.assertTrue(
+                any("Why these decisions differ" in item.value for item in app.subheader)
+            )
+            self.assertTrue(
+                any("condition-action rule" in item.value for item in app.markdown)
+            )
             self.assertTrue(any("Simple Reflex" in item.value for item in app.markdown))
             agent_expanders = [
                 item

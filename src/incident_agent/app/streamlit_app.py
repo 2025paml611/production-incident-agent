@@ -7,6 +7,9 @@ import streamlit as st
 from incident_agent.domain.models import AgentResult, IncidentScenario, Metric
 from incident_agent.domain.scenarios import ScenarioCatalog, load_scenarios
 from incident_agent.orchestration import IncidentOrchestrator, IncidentRun
+from incident_agent.orchestration.decision_comparison import (
+    explain_decision_differences,
+)
 
 _AGENT_LABELS = {
     "simple_reflex": "Simple Reflex",
@@ -264,6 +267,8 @@ def _render_run(run: IncidentRun, orchestrator: IncidentOrchestrator) -> None:
         "symptom rules, retained observations, explicit restoration goals, weighted "
         "utility, recorded action outcomes, or evidence gathered by the local LLM."
     )
+    st.subheader("Why these decisions differ")
+    st.markdown(explain_decision_differences(run))
 
     st.subheader("Individual agent results")
     for execution in run.executions:

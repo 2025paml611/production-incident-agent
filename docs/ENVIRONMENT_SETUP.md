@@ -78,7 +78,7 @@ Start the Streamlit app:
 
 ```powershell
 $env:PYTHONPATH = "$PWD\src"
-.\.venv\Scripts\python.exe -m streamlit run src\incident_agent\app\streamlit_app.py
+.\.venv\Scripts\python.exe -m streamlit run .\src\incident_agent\app\streamlit_app.py
 ```
 
 Select one of scenarios A-D and choose **Compare all six agents**. The Ollama model must be running for its result; other agents still report their results if it is unavailable. Learning history changes only when an explicit success/failure outcome is recorded in the UI.

@@ -103,7 +103,7 @@ Start the app in a separate terminal:
 
    ```powershell
    $env:PYTHONPATH = "$PWD\src"
-   .\.venv\Scripts\python.exe -m streamlit run src\incident_agent\app\streamlit_app.py
+   .\.venv\Scripts\python.exe -m streamlit run .\src\incident_agent\app\streamlit_app.py
    ```
 
 To run the slower live Ollama verification:

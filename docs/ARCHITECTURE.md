@@ -2,7 +2,7 @@
 
 ## Overview
 
-The application separates scenario data, agent implementations, evidence tools, orchestration, and presentation. The orchestrator loads one selected scenario and passes the same immutable object to all six agents. Individual agent failures are retained beside successful results. Learning feedback is recorded only through a separate explicit outcome call. The LLM can additionally query fixture-backed tools for evidence about that same scenario and must cite exact returned evidence from at least two different tools.
+The application separates scenario data, agent implementations, evidence tools, orchestration, and the Streamlit UI. The orchestrator loads one selected scenario and passes the same immutable object to all six agents. Individual agent failures are retained beside successful results. Learning feedback is recorded only through a separate explicit outcome call. The LLM queries fixture-backed tools for evidence from that same scenario and must cite exact returned evidence from at least two different tools.
 
 ## Architecture diagram
 
@@ -69,13 +69,13 @@ Streamlit UI
 `-- screenshots/
 ```
 
-All application Python files belong under `src/incident_agent/` in their relevant package. Do not place Python modules directly in `src/`. The folder order reflects the implementation flow: define domain contracts and scenarios, implement agents and tools, connect them through orchestration, then build the UI. Add each file in its owning folder as that phase begins; avoid creating empty placeholder modules ahead of implementation.
+Application code is organized under `src/incident_agent/` by responsibility. The folders separate the UI, agents, domain models, orchestration, storage, and evidence tools.
 
-`data/scenarios/` holds the shared scenario fixtures, while `data/learning/` holds the Learning Agent's explicit experience data. `tests/unit/` and `tests/integration/` separate focused logic checks from full-flow checks. `screenshots/` contains final demonstration evidence.
+`data/scenarios/` holds the shared scenario fixtures, while `data/learning/` holds the Learning Agent's explicit experience data. `tests/unit/` and `tests/integration/` separate focused logic checks from full-flow checks. `screenshots/` contains the scenario comparison and agent-detail images included with the submission.
 
 ## Shared data and result contracts
 
-The first implementation uses a small, curated **synthetic fixture set**, not a trained-on or externally collected dataset. `data/scenarios/scenarios.json` is the canonical fixture file. Scenario A covers latency/errors with database-pool exhaustion; B covers a traffic/CPU spike with normal database connections; C covers a configuration change followed by startup failure and a healthy previous version; D has conflicting or missing evidence. The fixtures are explicitly synthetic and are suitable for deterministic demonstrations, not operational decisions.
+The application uses a small, curated **synthetic fixture set**, not a trained or externally collected dataset. `data/scenarios/scenarios.json` is the canonical fixture file. Scenario A covers latency/errors with database-pool exhaustion; B covers a traffic/CPU spike with normal database connections; C covers a configuration change followed by startup failure and a healthy previous version; D has conflicting or missing evidence. The fixtures support deterministic tests and comparisons, not operational decisions.
 
 `src/incident_agent/domain/models.py` defines frozen, typed models. One `IncidentScenario` instance is loaded for a run and later passed to all agents. Its fields include:
 
@@ -93,7 +93,7 @@ The shared `AgentResult` model requires:
 - verification steps and limitations
 - optional recommended action ID for associating later outcome feedback
 
-LLM tool-call summaries are retained as structured result data. Expected causes/actions used to evaluate a demo must remain separate from the scenario passed to agents, to avoid answer leakage. Missing evidence is represented explicitly rather than invented.
+LLM tool-call summaries are retained as structured result data. Expected causes/actions used in tests must remain separate from the scenario passed to agents, to avoid answer leakage. Missing evidence is represented explicitly rather than invented.
 
 ## Agent responsibilities
 
@@ -108,14 +108,14 @@ The classical agents should remain independently understandable and testable. Sh
 
 ## Evidence tools
 
-Implement deterministic, local tools over the selected scenario fixture:
+The LLM uses deterministic, local tools over the selected scenario fixture:
 
 - `get_metrics`: return relevant metric values and time window.
 - `search_logs`: return matching log evidence for the incident.
 - `get_deployment_history`: return recent deployment/configuration events.
 - `check_previous_version`: report previous-version health or availability.
 
-Tool arguments should identify the selected scenario and any search criteria. Tool results should preserve source/context so the LLM's evidence can be checked. These are demo tools, not production observability integrations.
+Each tool instance is bound to the selected scenario, so the model cannot switch fixtures through its arguments. Arguments are limited to filters such as metric names, log search text, and result limits. Results preserve source and context so citations can be checked. These tools read local fixtures; they are not production observability integrations.
 
 ## Scenario catalog
 

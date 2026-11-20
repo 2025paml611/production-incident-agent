@@ -2,16 +2,23 @@
 
 Intelligent Production Incident Management System (Assignment 1-set-1 - Group-2).
 
-A solo Group 2 project comparing five classical AI agents and one local-LLM agent on the same production-incident scenario. The application shows their recommendations and supporting evidence in a Streamlit interface.
+A three-member Group 2 project comparing five classical AI agents and one local-LLM agent on the same production-incident scenario. The application shows their recommendations and supporting evidence in a Streamlit interface.
+
+## Project team
+
+- Ramniwash Kumar
+- KAMMADANAM SOWMYA
+- CHAUDHARI GANESH GOVIND
 
 ## Project status
 
 Phases 1-5 are complete: shared scenario/result models, four synthetic fixtures, five classical agents, Learning Agent experience tracking, fixture-bound LangChain tools, the Ollama agent, six-agent orchestration, and the Streamlit comparison UI are implemented and tested. Each comparison run supplies the same selected scenario to all agents, surfaces individual failures, and changes learning history only after explicit outcome feedback. The Ollama agent requires evidence from at least two tools and validates exact evidence quotes before returning a recommendation.
 
 Phase 6 verification is recorded in [docs/TEST_RESULTS.md](docs/TEST_RESULTS.md).
-The deterministic suite and live Ollama tool-calling test passed, and the scenario
-screenshots are included under `screenshots/`. Final clean-environment verification
-and pushing the Phase 6 branch remain.
+The deterministic suite, clean-environment app smoke test, and live Ollama
+tool-calling test passed, and scenario screenshots are included under `screenshots/`.
+The implementation is merged into `main`. Commit and push any outstanding
+documentation or screenshot updates before uploading the project to the course portal.
 
 ## Implemented capabilities
 

@@ -6,7 +6,11 @@ Build an incident assistant that investigates software-service incidents and com
 
 ## Scope and assumptions
 
-- Individual Group 2 project with one contributor.
+- Three-member Group 2 project:
+  - Ramniwash Kumar
+  - KAMMADANAM SOWMYA
+  - CHAUDHARI GANESH GOVIND
+- Confirm actual contribution ownership with the team before recording individual roles; the suggested workstreams below are not an attribution of completed work.
 - Local demonstration using fixed, synthetic scenario data; no connection to a real production system.
 - The LLM uses a local Ollama model through LangChain and must call at least two relevant evidence tools.
 - The Learning Agent reads and updates explicit success/failure experience data.
@@ -32,8 +36,8 @@ Implement phases in order. A later phase may start only when its listed contract
 
 **Exit checklist**
 
-- [x] The contributor's development setup is ready.
-- [x] The chosen model is present and a minimal LangChain tool-call smoke test succeeds on the primary laptop.
+- [x] The project setup and application have been verified in an isolated environment; members who plan to run the application locally should verify their own setup.
+- [x] A compatible model is installed and the live LangChain tool-calling test passes on the project verification machine; each local Ollama installation should be checked before use.
 - [x] The common input/output contract and scenario IDs are documented.
 
 ### Phase 1 — Domain models and shared scenario fixtures
@@ -175,20 +179,20 @@ Implement phases in order. A later phase may start only when its listed contract
 **Files**
 
 - Update `README.md`, `docs/ENVIRONMENT_SETUP.md`, `docs/ARCHITECTURE.md`, and `docs/TEST_PLAN.md`.
-- Save demo images under `screenshots/`.
+- Save submission images under `screenshots/`.
 - Keep final test output in the submission evidence (document results; do not claim tests that were not run).
 
 **Exit checklist**
 
-- [ ] All submission checklist items below are complete.
-- [ ] Clean-environment setup and application launch have been verified.
+- [x] All repository implementation and evidence checklist items below are complete.
+- [x] Clean-environment dependency installation, deterministic tests, and application launch have been verified.
 - [x] Deterministic test results, selected Ollama model, and skipped/live test outcomes are documented.
 - [x] Scenarios A-D were run through the Streamlit app and screenshots saved under `screenshots/`.
-- [ ] Final commit is pushed and visible in the Group 2 GitHub repository.
+- [ ] Current documentation and supplementary screenshot changes are committed and pushed to the Group 2 GitHub repository.
 
 ## Estimated effort and schedule
 
-The estimates below are planning estimates, not guarantees. They represent the approximate total effort for one contributor; actual time depends on local model setup and debugging.
+The estimates below are planning estimates, not guarantees. They represent approximate total team effort (person-hours), not hours per member; actual calendar time depends on local model setup, coordination, and integration.
 
 | Workstream | Estimated person-hours |
 |---|---:|
@@ -203,16 +207,18 @@ The estimates below are planning estimates, not guarantees. They represent the a
 | Documentation and screenshots | 2 |
 | **Estimated total** | **28.5 person-hours** |
 
-The estimated work sums to about 28.5 person-hours. It assumes the local model is available and tool-calling compatible; model troubleshooting can add time. Integration and end-to-end testing are sequential tasks, so prioritizing the acceptance criteria is more important than optional polish.
+The estimated work sums to about 28.5 team person-hours. It assumes the local model is available and tool-calling compatible; model troubleshooting can add time. Integration and end-to-end testing are sequential tasks, so prioritizing the acceptance criteria is more important than optional polish.
 
-### Single-contributor workflow
+### Three-member collaboration model
 
-- Define and validate the shared scenario/result contracts and fixture data.
-- Implement and test the five classical agents, experience store, evidence tools, and local Ollama agent.
-- Integrate all six agents through the orchestrator and build the Streamlit comparison UI.
-- Run end-to-end tests, capture scenario screenshots, and complete documentation and submission checks.
+Suggested workstream split; map these areas to the actual members and contributions before submitting:
 
-### Deadline-driven calendar plan
+- **Domain and classical agents:** scenario/result contracts, fixtures, the five classical decision mechanisms, and Learning Agent experience tracking.
+- **LLM and evidence tools:** fixture-bound tools, local Ollama/LangChain agent, grounding checks, and live-model validation.
+- **Integration and submission:** orchestration, Streamlit comparison UI, cross-agent tests, screenshots, and submission documentation.
+- All members review the shared input contract and check the final submission files. Workstream suggestions are not a record of who implemented which files.
+
+### Original assignment schedule
 
 | Date (2026) | Focus | End-of-day checkpoint |
 |---|---|---|
@@ -221,7 +227,7 @@ The estimated work sums to about 28.5 person-hours. It assumes the local model i
 | **Nov 16-17** | Phase 6: run regression/live-model tests, capture scenario screenshots, and finish submission documentation. | Submission checklist complete and results recorded. |
 | **Nov 18 (due 11:59 PM)** | Final clean-environment run, verify files/screenshots and GitHub state; reserve for blockers. | Submit before 11:59 PM; avoid optional feature work. |
 
-The plan targets roughly four focused implementation days and a final-day buffer. It is aggressive for one contributor, especially if Ollama downloads or tool calling require troubleshooting; prioritize the acceptance criteria and defer optional polish.
+These dates record the original plan for the November 2026 deadline. A three-member team can split some work, but shared-contract decisions, integration, and end-to-end testing still require coordination.
 
 ## Assignment requirement traceability
 
@@ -229,25 +235,25 @@ The plan targets roughly four focused implementation days and a final-day buffer
 |---|---|---|
 | Five separate classical agents with intended mechanisms | `src/incident_agent/agents/classical/` | Unit tests confirm separate rules/state/goals/utility/learning behavior. |
 | Local Ollama LLM through LangChain | `src/incident_agent/agents/llm/ollama_agent.py`, `requirements.txt` | Setup documentation names the compatible model; run evidence records model/version. |
-| LLM calls at least two relevant tools and grounds its recommendation in returned evidence | `src/incident_agent/tools/evidence_tools.py`, LLM integration test | Tool-call records/results and scenario screenshot demonstrate two or more calls and evidence use. |
+| LLM calls at least two relevant tools and grounds its recommendation in returned evidence | `src/incident_agent/tools/evidence_tools.py`, LLM integration test | The live integration test verifies calls to at least two distinct tools and exact evidence citations; the UI exposes the tool-call summaries. |
 | Same selected scenario data reaches all six agents | `src/incident_agent/domain/`, `src/incident_agent/orchestration/` | Integration test checks scenario identity/content for all six agents. |
-| At least three required scenarios: normal, critical/failure, edge/ambiguous | `data/scenarios/scenarios.json` | A, B, C, and D end-to-end results; D covers ambiguity explicitly. |
+| At least three required scenarios: normal, critical/failure, edge/ambiguous | `data/scenarios/scenarios.json` | Scenarios A-D are in the catalog; A-C have full comparison captures and D has an ambiguous-case comparison capture. |
 | Streamlit scenario selection, decisions, reasoning, and comparison | `src/incident_agent/app/streamlit_app.py` | Screenshots for scenario runs and comparison table. |
 | Learning Agent uses/updates success/failure experience and explains effect | `src/incident_agent/agents/classical/learning.py`, `src/incident_agent/storage/experience_store.py`, `data/learning/experience.json` | Learning test and before/after feedback evidence; recommendation alone does not update counts. |
 | Expected output: summary, evidence, likely cause, action, verification, limitations | Shared `AgentResult` contract and UI | All six result cards expose these fields or mark unavailable evidence/uncertainty. |
-| Comparison table and explanation for differing decisions | Streamlit UI and `README.md` or demonstration notes | Comparison screenshots and written explanation citing agent decision mechanisms. |
+| Comparison table and explanation for differing decisions | Streamlit UI and `README.md` | Comparison screenshots and a written explanation of the agents' decision mechanisms. |
 | Source, requirements, README, setup instructions, tests, results, screenshots | Root, `src/`, `tests/`, `docs/`, `screenshots/` | Final checklist below; test results report only commands actually run. |
 
 ## Acceptance criteria
 
-- [ ] Five distinct classical agents use their intended decision mechanisms, not aliases of one common rule.
-- [ ] The local Ollama/LangChain agent invokes at least two relevant tools and uses their returned evidence.
-- [ ] All six agents receive the same selected scenario contents on a comparison run.
-- [ ] Scenarios A-C meet the assignment descriptions; D demonstrates ambiguous/missing evidence behavior.
-- [ ] Every result exposes an incident summary, evidence, likely cause, recommended action, verification steps, and limitations (or explicitly marks unavailable fields).
-- [ ] Learning experience data is used, updated from a recorded outcome, and explained in its result.
-- [ ] The Streamlit UI shows decisions, reasoning, and an understandable comparison.
-- [ ] Tests, results, and scenario screenshots are included.
+- [x] Five distinct classical agents use their intended decision mechanisms, not aliases of one common rule.
+- [x] The local Ollama/LangChain agent invokes at least two relevant tools and uses their returned evidence.
+- [x] All six agents receive the same selected scenario contents on a comparison run.
+- [x] Scenarios A-C meet the assignment descriptions; D demonstrates ambiguous/missing evidence behavior.
+- [x] Every result exposes an incident summary, evidence, likely cause, recommended action, verification steps, and limitations (or explicitly marks unavailable fields).
+- [x] Learning experience data is used, updated from a recorded outcome, and explained in its result.
+- [x] The Streamlit UI shows decisions, reasoning, and an understandable comparison.
+- [x] Tests, results, and scenario screenshots are included.
 
 ## Risks and mitigations
 
@@ -272,4 +278,5 @@ The plan targets roughly four focused implementation days and a final-day buffer
 - [x] `requirements.txt`, README, setup instructions, architecture diagram/reference, and test plan
 - [x] Recorded test commands/results, including the skipped default Ollama test and successful opt-in live test
 - [x] Screenshots for A, B, and C, plus D
-- [ ] Final source and evidence pushed to the Group 2 GitHub repository
+- [x] The implementation and original scenario evidence are pushed and merged into the Group 2 GitHub repository's `main` branch
+- [ ] Current documentation and supplementary screenshot changes are committed and pushed

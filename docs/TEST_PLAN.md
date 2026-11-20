@@ -37,12 +37,12 @@ Where possible, keep tests deterministic by testing tool adapters and prompt/res
 - LLM/tool errors are visible and are not displayed as successful recommendations.
 - Learning experience changes are visible and do not silently alter unrelated scenario data.
 
-## Demonstration evidence to capture
+## Submission evidence
 
 1. Scenario A comparison, including the LLM's tool evidence.
 2. Scenario B comparison.
 3. Scenario C critical-failure comparison.
-4. Scenario D ambiguous case if included in the final demo.
+4. Scenario D ambiguous case, to show how agents handle missing or conflicting evidence.
 5. Learning Agent experience counts before/after a controlled feedback update.
 6. Test command output and pass/fail summary.
 

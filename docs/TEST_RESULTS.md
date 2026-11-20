@@ -50,7 +50,48 @@ these runs verify the demo flow, not behavior against live service data.
 
 The local Streamlit endpoint returned **HTTP 200** at `http://127.0.0.1:8765/`.
 This was verified in the existing project environment; a separate clean-environment
-installation has not yet been performed.
+installation was subsequently verified on November 20, 2026, as detailed below.
+
+## Clean-environment re-verification
+
+On November 20, 2026, the project dependencies were installed into a new temporary
+virtual environment using Python 3.14.4. `pip check` reported no broken requirements.
+The full deterministic suite passed: **46 tests passed; 1 opt-in live Ollama test
+skipped**.
+
+The opt-in Ollama tool-calling test was then run from that environment against local
+Ollama 0.40.16 and `qwen3:4b`: **1 test passed** in 147.546 seconds. It verified
+calls to at least two different fixture-bound tools and exact evidence citations.
+
+The Streamlit app was started from the clean environment on port 8768, and a direct
+local HTTP probe returned **200**. The first PowerShell `Invoke-WebRequest` probe
+did not connect; retrying with `curl.exe --noproxy "*"` succeeded. No application
+code changes were needed.
+
+Commands used:
+
+```powershell
+$cleanEnv = Join-Path $env:TEMP 'production-incident-agent-clean-env-20261120'
+py -3.14 -m venv $cleanEnv
+$python = Join-Path $cleanEnv 'Scripts\python.exe'
+& $python -m pip install --upgrade pip
+& $python -m pip install -r requirements.txt
+& $python -m pip check
+$env:PYTHONPATH = "$PWD\src"
+& $python -m unittest discover -s tests -v
+$env:RUN_OLLAMA_INTEGRATION = "1"
+& $python -m unittest tests.integration.test_ollama_tool_calling -v
+$env:RUN_OLLAMA_INTEGRATION = $null
+& $python -m streamlit run src\incident_agent\app\streamlit_app.py --server.headless=true --server.port=8768 --browser.gatherUsageStats=false
+```
+
+In a second terminal, the local app endpoint was checked with:
+
+```powershell
+curl.exe --noproxy "*" -sS -o NUL -w "HTTP %{http_code}`n" --max-time 5 http://127.0.0.1:8768/
+```
+
+The isolated environment was used only for verification and is not part of the repository.
 
 ## Scenario screenshots
 
@@ -60,6 +101,9 @@ Captured from the running Streamlit application with the local Ollama model:
 - [Scenario B — traffic and CPU spike](../screenshots/scenario-B-comparison.png)
 - [Scenario C — configuration startup failure](../screenshots/scenario-C-comparison.png)
 - [Scenario D — ambiguous evidence](../screenshots/scenario-D-full-comparison.png)
+- [Scenario A — expanded Learning Agent and LLM evidence](../screenshots/scenario-A-agent-details.png)
 
 Each comparison image is a full-page capture showing the scenario snapshot and all
-six agent rows; individual agent details can be expanded in the running app.
+six agent rows; individual agent details can be expanded in the running app. The
+supplementary Scenario A image also expands the Learning Agent's experience counts
+and explicit feedback controls, and the LLM's tool evidence and tool-call summaries.

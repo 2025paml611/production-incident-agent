@@ -1,6 +1,6 @@
 # Environment Setup
 
-This guide describes the planned development setup for the Intelligent Production Incident Management System. Commands are for Windows PowerShell.
+This guide covers setup, testing, and running the Intelligent Production Incident Management System. Commands are for Windows PowerShell.
 
 ## Prerequisites
 
@@ -12,20 +12,15 @@ This guide describes the planned development setup for the Intelligent Productio
 
 Use a local model compatible with LangChain tool calling. The initial local setup uses `qwen3:4b`, configurable through `INCIDENT_AGENT_OLLAMA_MODEL`. Ollama and its model weights are installed outside the Git repository; do not commit model files.
 
-## Create the GitHub repository
+## Clone the repository
 
-1. Create a new, empty GitHub repository under your account.
-2. Choose a descriptive name such as `production-incident-agent`.
-3. Do not initialize it with files if you plan to push an existing local project.
-4. Clone it and open its folder in VS Code:
+Clone the existing Group 2 repository and open its folder in VS Code:
 
-   ```powershell
-   git clone https://github.com/<your-username>/production-incident-agent.git
-   Set-Location production-incident-agent
-   code .
-   ```
-
-Replace `<your-username>` with your GitHub username. Keep repository visibility and any course-specific sharing requirements in mind.
+```powershell
+git clone https://github.com/2025paml611/production-incident-agent.git
+Set-Location production-incident-agent
+code .
+```
 
 ## Python environment
 
